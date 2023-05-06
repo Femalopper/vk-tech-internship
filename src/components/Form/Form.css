@@ -1,0 +1,41 @@
+@import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
+
+.date-and-time, .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.date {
+    width: 25%;
+}
+
+.time {
+    margin-left: 5%;
+    width: 136px;
+}
+
+input{
+    border: none;
+}
+
+.react-datepicker-ignore-onclickoutside {
+    width: 100%;
+}
+
+.react-datepicker-ignore-onclickoutside:focus-visible {
+    outline: none;
+}
+
+.rs-picker-toggle-wrapper {
+    display: flex;
+    width: 544px;
+}
+
+.clear {
+    margin-left: 5%;
+}
+
+.rs-tooltip {
+    background-color: #e91e63;
+}

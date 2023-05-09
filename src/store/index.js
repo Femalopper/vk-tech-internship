@@ -1,12 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
-import formReducer from "./formSlice.js";
+import { configureStore } from '@reduxjs/toolkit';
+import formReducer from './formSlice';
 
 export default configureStore({
   reducer: {
     form: formReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });

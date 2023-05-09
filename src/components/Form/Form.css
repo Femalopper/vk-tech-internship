@@ -1,72 +1,86 @@
-@import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
+@import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 
-.date-and-time, .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
+.date-and-time,
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
 .date {
-    width: 35%;
+  width: 35%;
 }
 
 .time {
-    margin-left: 5%;
-    width: 136px;
+  margin-left: 5%;
+  width: 136px;
 }
 
-input{
-    border: none;
+input {
+  border: none;
 }
 
 .react-datepicker-ignore-onclickoutside {
-    width: 100%;
+  width: 100%;
 }
 
 .react-datepicker-ignore-onclickoutside:focus-visible {
-    outline: none;
+  outline: none;
 }
 
 .rs-picker-toggle-wrapper {
-    display: flex;
-    width: 544px;
+  display: flex;
+  width: 544px;
 }
 
 .clear {
-    margin-left: 5%;
-    background-color: #e91e63;
+  margin-left: 5%;
+  background-color: #e91e63;
 }
 
 .rs-tooltip {
-    background-color: #e91e63;
+  background-color: #e91e63;
 }
 
 @media screen and (min-width: 420px) and (max-width: 680px) {
-    .rs-picker-toggle, .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input, .rs-picker-select-menu-item, .rs-anim-fade, .rs-calendar-table-cell-content, .form-control, .btn {
-        font-size: 0.9em;
-    }
+  .rs-picker-toggle,
+  .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input,
+  .rs-picker-select-menu-item,
+  .rs-anim-fade,
+  .rs-calendar-table-cell-content,
+  .form-control,
+  .btn {
+    font-size: 0.9em;
+  }
 
-    .rs-picker-menu .rs-calendar {
-        width: 200px;
-        min-width: 200px;
-    }
+  .rs-picker-menu .rs-calendar {
+    width: 200px;
+    min-width: 200px;
+  }
 }
 
 @media screen and (min-width: 280px) and (max-width: 420px) {
-    .rs-picker-toggle, .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input, .rs-picker-select-menu-item, .rs-anim-fade, .rs-calendar-table-cell-content, .form-control, .btn {
-        font-size: 0.8em;
-    }
+  .rs-picker-toggle,
+  .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input,
+  .rs-picker-select-menu-item,
+  .rs-anim-fade,
+  .rs-calendar-table-cell-content,
+  .form-control,
+  .btn {
+    font-size: 0.8em;
+  }
 
-    .rs-picker-menu .rs-calendar, .rs-anim-fade {
-        width: 200px;
-        min-width: 200px;
-    }
+  .rs-picker-menu .rs-calendar,
+  .rs-anim-fade {
+    width: 200px;
+    min-width: 200px;
+  }
 
-    .date {
-        width: 45%;
-    }
+  .date {
+    width: 45%;
+  }
 
-    .time {
-        width: 46%;
-    }
+  .time {
+    width: 46%;
+  }
 }

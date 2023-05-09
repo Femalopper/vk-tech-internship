@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SelectPicker } from "rsuite";
-import { DatePicker } from "rsuite";
+import { SelectPicker, Tooltip, Whisper, DatePicker } from "rsuite";
 import isBefore from "date-fns/isBefore";
-import { Tooltip, Whisper } from "rsuite";
 import "../../../node_modules/rsuite/dist/rsuite.css";
 import "./Form.css";
 import {
@@ -54,7 +52,6 @@ const Form = () => {
     // 2.1 use the date().min() function to specify the minimum date
     minPublishDate: date().min(minPublishDate),
   });
-  console.log(schema);
 
   useEffect(() => {
     if (selectedDate) {
@@ -160,15 +157,6 @@ const Form = () => {
     return "none";
   };
 
-  window.addEventListener('scroll', () => {
-    document.documentElement.style.setProperty('--scroll-y', `${window.pageYOffset}px`);
-  });
-
-  const showDialog = (scrollY) => () => {
-    console.log(scrollY)
-    window.scrollTo(0, scrollY);
-  };
-
   const isSubmitDisabled = () => formStatus === "unfilled";
 
   const handleSubmit = (e) => {
@@ -176,8 +164,6 @@ const Form = () => {
     console.log(
       JSON.stringify({ tower, floor, roomNumber, selectedDate, time, comment })
     );
-    const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
-    console.log(scrollY);
     Swal.fire({
       heightAuto: false,
       title: `<strong><u>Вы забронировали переговорную номер ${roomNumber} в башне ${tower} на ${floor} этаже на ${selectedDate.toLocaleDateString()} ${time}</u></strong>`,
@@ -198,44 +184,44 @@ const Form = () => {
   };
 
   const changeTowerHandler = (val) => {
-      dispatch(setValue([val, "tower"]));
-      dispatch(setFieldStatus(["filled", "tower"]));
+    dispatch(setValue([val, "tower"]));
+    dispatch(setFieldStatus(["filled", "tower"]));
   };
 
   const changeFloorHandler = (val) => {
-      dispatch(setValue([val, "floor"]));
-      dispatch(setFieldStatus(["filled", "floor"]));
-      if (!floor) {
-        dispatch(setFieldStatus(["available", "roomNumber"]));
-      } else {
-        dispatch(setFieldStatus(["reset", "roomNumber"]));
-        dispatch(setValue([null, "roomNumber"]));
-      }
-      if (!val) {
-        dispatch(setRooms([]));
-        dispatch(setFieldStatus(["unavailable", "roomNumber"]));
-      } else {
-        dispatch(setRooms(negotiationRooms[val]));
-      }
+    dispatch(setValue([val, "floor"]));
+    dispatch(setFieldStatus(["filled", "floor"]));
+    if (!floor) {
+      dispatch(setFieldStatus(["available", "roomNumber"]));
+    } else {
+      dispatch(setFieldStatus(["reset", "roomNumber"]));
+      dispatch(setValue([null, "roomNumber"]));
+    }
+    if (!val) {
+      dispatch(setRooms([]));
+      dispatch(setFieldStatus(["unavailable", "roomNumber"]));
+    } else {
+      dispatch(setRooms(negotiationRooms[val]));
+    }
   };
 
   const changeRoomHandler = (val) => {
-      dispatch(setValue([val, "roomNumber"]));
-      dispatch(setFieldStatus(["filled", "roomNumber"]));
+    dispatch(setValue([val, "roomNumber"]));
+    dispatch(setFieldStatus(["filled", "roomNumber"]));
   };
 
   const changeTimeHandler = (val) => {
-      dispatch(setFieldStatus(["filled", "time"]));
-      dispatch(setValue([val, "time"]));
+    dispatch(setFieldStatus(["filled", "time"]));
+    dispatch(setValue([val, "time"]));
   };
-  
+
   const commentChangeHandler = (e) => {
-      if (e.target.value !== "") {
-        dispatch(setFieldStatus(["filled", "comment"]));
-      } else {
-        dispatch(setFieldStatus(["unfilled", "comment"]));
-      }
-      dispatch(setValue([e.target.value, "comment"]));
+    if (e.target.value !== "") {
+      dispatch(setFieldStatus(["filled", "comment"]));
+    } else {
+      dispatch(setFieldStatus(["unfilled", "comment"]));
+    }
+    dispatch(setValue([e.target.value, "comment"]));
   };
 
   return (
@@ -333,7 +319,11 @@ const Form = () => {
         >
           Отправить
         </button>
-        <button type="button" className="btn btn-danger clear" onClick={clearFormHandler}>
+        <button
+          type="button"
+          className="btn btn-danger clear"
+          onClick={clearFormHandler}
+        >
           Очистить
         </button>
       </div>

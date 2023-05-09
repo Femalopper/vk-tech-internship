@@ -29,7 +29,7 @@
     "lint": "eslint -c .eslintrc.yml --ext .js,.jsx .",
     "lint:fix": "npm run lint -- --fix",
     "predeploy": "npm run build",
-    "deploy": "vk-tech-internship -d build"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

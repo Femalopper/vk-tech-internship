@@ -12,7 +12,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  height: 800px;
+  overflow-y: hidden;
+}
+
+body.swal2-container {
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 code {

@@ -7,7 +7,7 @@
 }
 
 .date {
-    width: 25%;
+    width: 35%;
 }
 
 .time {
@@ -39,4 +39,34 @@ input{
 
 .rs-tooltip {
     background-color: #e91e63;
+}
+
+@media screen and (min-width: 420px) and (max-width: 680px) {
+    .rs-picker-toggle, .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input, .rs-picker-select-menu-item, .rs-anim-fade, .rs-calendar-table-cell-content, .form-control, .btn {
+        font-size: 0.9em;
+    }
+
+    .rs-picker-menu .rs-calendar {
+        width: 200px;
+        min-width: 200px;
+    }
+}
+
+@media screen and (min-width: 280px) and (max-width: 420px) {
+    .rs-picker-toggle, .rs-picker-menu .rs-picker-search-bar .rs-picker-search-bar-input, .rs-picker-select-menu-item, .rs-anim-fade, .rs-calendar-table-cell-content, .form-control, .btn {
+        font-size: 0.8em;
+    }
+
+    .rs-picker-menu .rs-calendar, .rs-anim-fade {
+        width: 200px;
+        min-width: 200px;
+    }
+
+    .date {
+        width: 45%;
+    }
+
+    .time {
+        width: 46%;
+    }
 }

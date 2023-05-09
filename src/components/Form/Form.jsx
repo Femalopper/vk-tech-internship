@@ -1,35 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SelectPicker } from "rsuite";
-import "../../../node_modules/rsuite/dist/rsuite.css";
 import { DatePicker } from "rsuite";
 import isBefore from "date-fns/isBefore";
 import { Tooltip, Whisper } from "rsuite";
+import "../../../node_modules/rsuite/dist/rsuite.css";
 import "./Form.css";
 import {
+  reset,
   selectComment,
+  selectCommentStatus,
   selectDate,
+  selectDateStatus,
   selectFloor,
   selectFloorStatus,
+  selectFormStatus,
   selectRoomNumber,
   selectRoomStatus,
   selectRooms,
   selectTime,
+  selectTimeStatus,
   selectTower,
+  selectTowerStatus,
   setFieldStatus,
+  setFormStatus,
   setRooms,
   setValue,
 } from "../../store/formSlice";
+import dayjs from "dayjs";
+import { object, date } from "yup";
+import Swal from "sweetalert2";
 
 const Form = () => {
   const tower = useSelector(selectTower);
   const floor = useSelector(selectFloor);
   const roomNumber = useSelector(selectRoomNumber);
+  const selectedDate = useSelector(selectDate);
   const time = useSelector(selectTime);
   const comment = useSelector(selectComment);
+  const towerStatus = useSelector(selectTowerStatus);
+  const floorStatus = useSelector(selectFloorStatus);
   const roomStatus = useSelector(selectRoomStatus);
+  const dateStatus = useSelector(selectDateStatus);
+  const timeStatus = useSelector(selectTimeStatus);
+  const commentStatus = useSelector(selectCommentStatus);
   const rooms = useSelector(selectRooms);
+  const formStatus = useSelector(selectFormStatus);
   const dispatch = useDispatch();
+
+  const minPublishDate = dayjs().add(0, "day").format("YYYY-MM-DD");
+
+  const schema = object({
+    // 2.1 use the date().min() function to specify the minimum date
+    minPublishDate: date().min(minPublishDate),
+  });
+  console.log(schema);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const dateToCheck = {
+        minPublishDate: selectedDate,
+      };
+      schema
+        .validate(dateToCheck)
+        .then((result) => {
+          if (result) {
+            dispatch(setFieldStatus(["filled", "date"]));
+          }
+        })
+        .catch((e) => console.log(e));
+    }
+    const fieldsStatus = {
+      towerStatus,
+      floorStatus,
+      roomStatus,
+      dateStatus,
+      timeStatus,
+      commentStatus,
+    };
+    const fieldsStatusValues = Object.values(fieldsStatus);
+    const unfilledFields = fieldsStatusValues.filter(
+      (status) => status !== "filled"
+    );
+    if (unfilledFields.length === 0) {
+      dispatch(setFormStatus("filled"));
+    } else {
+      dispatch(setFormStatus("unfilled"));
+    }
+  }, [
+    selectedDate,
+    towerStatus,
+    floorStatus,
+    roomStatus,
+    dateStatus,
+    timeStatus,
+    commentStatus,
+    dispatch,
+    schema,
+  ]);
 
   const firstFloor = 3;
   const lastFloor = 27;
@@ -52,10 +120,12 @@ const Form = () => {
       value: "Б",
     },
   ];
+
   const floorOptions = floors.map((floor) => ({
     label: floor,
     value: floor,
   }));
+
   const roomOptions = rooms.map((room) => ({
     label: room,
     value: room,
@@ -75,12 +145,14 @@ const Form = () => {
       value: "15:00 - 18:00",
     },
   ];
+
   const isRoomFieldDisabled = () => {
     if (roomStatus === "unavailable") {
       return true;
     }
     return false;
   };
+
   const isTooltipTriggered = () => {
     if (roomStatus === "unavailable") {
       return "hover";
@@ -88,18 +160,94 @@ const Form = () => {
     return "none";
   };
 
+  window.addEventListener('scroll', () => {
+    document.documentElement.style.setProperty('--scroll-y', `${window.pageYOffset}px`);
+  });
+
+  const showDialog = (scrollY) => () => {
+    console.log(scrollY)
+    window.scrollTo(0, scrollY);
+  };
+
+  const isSubmitDisabled = () => formStatus === "unfilled";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(
+      JSON.stringify({ tower, floor, roomNumber, selectedDate, time, comment })
+    );
+    const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
+    console.log(scrollY);
+    Swal.fire({
+      heightAuto: false,
+      title: `<strong><u>Вы забронировали переговорную номер ${roomNumber} в башне ${tower} на ${floor} этаже на ${selectedDate.toLocaleDateString()} ${time}</u></strong>`,
+      icon: "info",
+      showCloseButton: true,
+      showCancelButton: false,
+      focusConfirm: false,
+      confirmButtonText: '<i class="fa fa-thumbs-up"></i> Отлично!',
+      confirmButtonAriaLabel: "Thumbs up, great!",
+      cancelButtonText: '<i class="fa fa-thumbs-down"></i>',
+      cancelButtonAriaLabel: "Thumbs down",
+    });
+    dispatch(reset());
+  };
+
+  const clearFormHandler = () => {
+    dispatch(reset());
+  };
+
+  const changeTowerHandler = (val) => {
+      dispatch(setValue([val, "tower"]));
+      dispatch(setFieldStatus(["filled", "tower"]));
+  };
+
+  const changeFloorHandler = (val) => {
+      dispatch(setValue([val, "floor"]));
+      dispatch(setFieldStatus(["filled", "floor"]));
+      if (!floor) {
+        dispatch(setFieldStatus(["available", "roomNumber"]));
+      } else {
+        dispatch(setFieldStatus(["reset", "roomNumber"]));
+        dispatch(setValue([null, "roomNumber"]));
+      }
+      if (!val) {
+        dispatch(setRooms([]));
+        dispatch(setFieldStatus(["unavailable", "roomNumber"]));
+      } else {
+        dispatch(setRooms(negotiationRooms[val]));
+      }
+  };
+
+  const changeRoomHandler = (val) => {
+      dispatch(setValue([val, "roomNumber"]));
+      dispatch(setFieldStatus(["filled", "roomNumber"]));
+  };
+
+  const changeTimeHandler = (val) => {
+      dispatch(setFieldStatus(["filled", "time"]));
+      dispatch(setValue([val, "time"]));
+  };
+  
+  const commentChangeHandler = (e) => {
+      if (e.target.value !== "") {
+        dispatch(setFieldStatus(["filled", "comment"]));
+      } else {
+        dispatch(setFieldStatus(["unfilled", "comment"]));
+      }
+      dispatch(setValue([e.target.value, "comment"]));
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="exampleFormControlSelect1">Выберите башню</label>
         <SelectPicker
           data={towerOptions}
           menuMaxHeight={100}
           value={tower}
-          onChange={(val) => {
-            dispatch(setValue([val, "tower"]));
-            dispatch(setFieldStatus(["filled", "tower"]));
-          }}
+          onChange={(val) => changeTowerHandler(val)}
+          onClean={() => dispatch(setFieldStatus(["unfilled", "tower"]))}
         />
       </div>
       <div className="form-group">
@@ -108,28 +256,14 @@ const Form = () => {
           data={floorOptions}
           menuMaxHeight={100}
           value={floor}
-          onChange={(val) => {
-            dispatch(setValue([val, "floor"]));
-            if (!floor) {
-              dispatch(setFieldStatus(["filled", "floor"]));
-              dispatch(setFieldStatus(["available", "roomNumber"]));
-            } else {
-              dispatch(setFieldStatus(["changed", "floor"]));
-              dispatch(setFieldStatus(["reset", "roomNumber"]));
-              dispatch(setValue([null, "roomNumber"]));
-            }
-            if (!val) {
-              dispatch(setRooms([]));
-              dispatch(setFieldStatus(["unavailable", "roomNumber"]));
-            } else {
-              dispatch(setRooms(negotiationRooms[val]));
-            }
-          }}
+          onChange={(val) => changeFloorHandler(val)}
+          onClean={() => dispatch(setFieldStatus(["unfilled", "floor"]))}
         />
       </div>
       <div className="form-group">
         <label htmlFor="exampleFormControlSelect1">Выберите переговорную</label>
         <Whisper
+          placement="topEnd"
           trigger={isTooltipTriggered()}
           speaker={<Tooltip>Выберите сначала этаж!</Tooltip>}
         >
@@ -139,10 +273,10 @@ const Form = () => {
               menuMaxHeight={100}
               value={roomNumber}
               disabled={isRoomFieldDisabled()}
-              onChange={(val) => {
-                dispatch(setValue([val, "roomNumber"]));
-                dispatch(setFieldStatus(["filled", "roomNumber"]));
-              }}
+              onChange={(val) => changeRoomHandler(val)}
+              onClean={() =>
+                dispatch(setFieldStatus(["unfilled", "roomNumber"]))
+              }
             />
           </div>
         </Whisper>
@@ -151,15 +285,23 @@ const Form = () => {
         <div className="date">
           <label htmlFor="exampleFormControlSelect1">Выберите дату</label>
           <DatePicker
+            value={selectedDate}
             oneTap
-            shouldDisableDate={(date) => isBefore(date, new Date())}
+            shouldDisableDate={(date) =>
+              isBefore(date, new Date(new Date().getTime() - 86400000)) ||
+              date.getDay() === 0 ||
+              date.getDay() === 6
+            }
             onClean={() => {
               dispatch(setValue([null, "date"]));
+              dispatch(setFieldStatus(["unfilled", "date"]));
             }}
-            onChangeCalendarDate={(val) => {
-              dispatch(setFieldStatus(["filled", "date"]));
-              dispatch(setValue([val.toString(), "date"]));
+            onKeyDown={() => {
+              dispatch(setFieldStatus(["unfilled", "date"]));
+              dispatch(setValue([null, "date"]));
             }}
+            onChangeCalendarDate={(val) => dispatch(setValue([val, "date"]))}
+            placeholder="гггг.мм.дд."
           />
         </div>
         <div className="time">
@@ -168,10 +310,8 @@ const Form = () => {
             data={timeOptions}
             searchable={false}
             value={time}
-            onChange={(val) => {
-              dispatch(setFieldStatus(["filled", "time"]));
-              dispatch(setValue([val, "time"]));
-            }}
+            onChange={(val) => changeTimeHandler(val)}
+            onClean={() => dispatch(setFieldStatus(["unfilled", "time"]))}
           />
         </div>
       </div>
@@ -182,17 +322,18 @@ const Form = () => {
           id="exampleFormControlTextarea1"
           rows="3"
           value={comment}
-          onChange={(e) => {
-            dispatch(setFieldStatus(["filled", "comment"]));
-            dispatch(setValue([e.target.value, "comment"]));
-          }}
+          onChange={commentChangeHandler}
         ></textarea>
       </div>
       <div className="buttons">
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={isSubmitDisabled()}
+        >
           Отправить
         </button>
-        <button type="button" className="btn btn-danger clear">
+        <button type="button" className="btn btn-danger clear" onClick={clearFormHandler}>
           Очистить
         </button>
       </div>

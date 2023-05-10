@@ -287,9 +287,11 @@ function Form() {
               dispatch(setValue([null, 'date']));
               dispatch(setFieldStatus(['unfilled', 'date']));
             }}
-            onKeyDown={() => {
-              dispatch(setFieldStatus(['unfilled', 'date']));
-              dispatch(setValue([null, 'date']));
+            onKeyDown={(e) => {
+              if (e.code !== 'Tab') {
+                dispatch(setFieldStatus(['unfilled', 'date']));
+                dispatch(setValue([null, 'date']));
+              }
             }}
             onChangeCalendarDate={(val) => dispatch(setValue([val, 'date']))}
             placeholder="гггг.мм.дд."

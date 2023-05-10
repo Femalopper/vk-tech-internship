@@ -17,11 +17,6 @@ body {
   overflow-y: hidden;
 }
 
-body.swal2-container {
-  height: 100vh;
-  overflow-y: hidden;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

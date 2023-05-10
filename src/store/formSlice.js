@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   chooseNegotiationRoomForm: {
@@ -39,19 +39,15 @@ export const formSlice = createSlice({
       const val = data.payload[0];
       const prop = data.payload[1];
       state.chooseNegotiationRoomForm[prop].value = val;
-      console.log(current(state));
     },
     setFieldStatus: (state, data) => {
       const status = data.payload[0];
       const prop = data.payload[1];
       state.chooseNegotiationRoomForm[prop].status = status;
-      console.log(current(state));
     },
     setRooms: (state, data) => {
       const rooms = data.payload;
-      console.log(rooms);
       state.chooseNegotiationRoomForm.rooms = rooms;
-      console.log(current(state));
     },
     setFormStatus: (state, data) => {
       state.chooseNegotiationRoomForm.status = data.payload;

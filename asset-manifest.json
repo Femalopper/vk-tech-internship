@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/vk-tech-internship/static/css/main.0ce03536.css",
-    "main.js": "/vk-tech-internship/static/js/main.1d896ad7.js",
+    "main.css": "/vk-tech-internship/static/css/main.52c4d1bf.css",
+    "main.js": "/vk-tech-internship/static/js/main.4e6bbfe5.js",
     "static/js/787.e3718bb5.chunk.js": "/vk-tech-internship/static/js/787.e3718bb5.chunk.js",
     "static/media/glyphicons-halflings-regular.svg": "/vk-tech-internship/static/media/glyphicons-halflings-regular.060b2710bdbbe3dfe48b.svg",
     "static/media/glyphicons-halflings-regular.ttf": "/vk-tech-internship/static/media/glyphicons-halflings-regular.4692b9ec53fd5972caa2.ttf",
@@ -9,12 +9,12 @@
     "static/media/glyphicons-halflings-regular.eot": "/vk-tech-internship/static/media/glyphicons-halflings-regular.5be1347c682810f199c7.eot",
     "static/media/glyphicons-halflings-regular.woff2": "/vk-tech-internship/static/media/glyphicons-halflings-regular.be810be3a3e14c682a25.woff2",
     "index.html": "/vk-tech-internship/index.html",
-    "main.0ce03536.css.map": "/vk-tech-internship/static/css/main.0ce03536.css.map",
-    "main.1d896ad7.js.map": "/vk-tech-internship/static/js/main.1d896ad7.js.map",
+    "main.52c4d1bf.css.map": "/vk-tech-internship/static/css/main.52c4d1bf.css.map",
+    "main.4e6bbfe5.js.map": "/vk-tech-internship/static/js/main.4e6bbfe5.js.map",
     "787.e3718bb5.chunk.js.map": "/vk-tech-internship/static/js/787.e3718bb5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0ce03536.css",
-    "static/js/main.1d896ad7.js"
+    "static/css/main.52c4d1bf.css",
+    "static/js/main.4e6bbfe5.js"
   ]
 }
